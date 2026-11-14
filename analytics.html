@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - EmotionTune{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Music Preferences -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-music text-warning me-2"></i>Music Preferences by Emotion
+                </h3>
+                <div style="height: 300px;">
+                    <canvas id="musicChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Timeline -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-history text-success me-2"></i>Recent Activity Timeline
+                </h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-success"></div>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between">
+                                <strong>Emotion Detected</strong>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <p class="mb-0">Detected emotion: Happy</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-primary"></div>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between">
+                                <strong>Song Played</strong>
+                                <small class="text-muted">4 hours ago</small>
+                            </div>
+                            <p class="mb-0">Played "Happy" by Pharrell Williams</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-warning"></div>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between">
+                                <strong>Mood Change</strong>
+                                <small class="text-muted">6 hours ago</small>
+                            </div>
+                            <p class="mb-0">Mood changed from Sad to Happy</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-info"></div>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between">
+                                <strong>Song Rated</strong>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                            <p class="mb-0">Rated "Bohemian Rhapsody" 5 stars</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker bg-danger"></div>
+                        <div class="timeline-content">
+                            <div class="d-flex justify-content-between">
+                                <strong>New Emotion</strong>
+                                <small class="text-muted">2 days ago</small>
+                            </div>
+                            <p class="mb-0">First time detecting: Surprised</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Quick Stats -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-bar text-info me-2"></i>Quick Stats
+                </h5>
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="bg-primary rounded p-3 text-white">
+                            <div class="h3 mb-0">156</div>
+                            <small>Total Emotions</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="bg-success rounded p-3 text-white">
+                            <div class="h3 mb-0">89</div>
+                            <small>Songs Played</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="bg-warning rounded p-3 text-white">
+                            <div class="h3 mb-0">23</div>
+                            <small>Days Active</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="bg-info rounded p-3 text-white">
+                            <div class="h3 mb-0">4.2</div>
+                            <small>Avg Rating</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Emotions -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-list text-primary me-2"></i>Most Common Emotions
+                </h5>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Happy</span>
+                        <span>45%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Neutral</span>
+                        <span>25%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-secondary" style="width: 25%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Sad</span>
+                        <span>15%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" style="width: 15%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Angry</span>
+                        <span>10%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" style="width: 10%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Surprised</span>
+                        <span>5%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emotion Distribution Pie Chart -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-pie text-danger me-2"></i>Emotion Distribution
+                </h5>
+                <div style="height: 300px;">
+                    <canvas id="emotionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Mood Chart -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-line text-warning me-2"></i>Weekly Mood Trends
+                </h5>
+                <div style="height: 300px;">
+                    <canvas id="weeklyTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.timeline-content {
+    padding-left: 10px;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 17px;
+    width: 2px;
+    height: 20px;
+    background-color: #dee2e6;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Emotion Distribution Chart
+    const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+    new Chart(emotionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Happy', 'Neutral', 'Sad', 'Angry', 'Surprised', 'Fearful', 'Disgusted'],
+            datasets: [{
+                data: [45, 25, 15, 10, 3, 1, 1],
+                backgroundColor: [
+                    '#198754', '#6c757d', '#0d6efd', '#dc3545',
+                    '#0dcaf0', '#ffc107', '#6f42c1'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Weekly Mood Trend Chart
+    const weeklyCtx = document.getElementById('weeklyTrendsChart').getContext('2d');
+    new Chart(weeklyCtx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Mood Score',
+                data: [8, 6, 9, 7, 8, 9, 7],
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+
+    // Music Preferences Chart
+    const musicCtx = document.getElementById('musicChart').getContext('2d');
+    new Chart(musicCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Pop', 'Rock', 'Classical', 'Jazz', 'Electronic', 'Hip-Hop'],
+            datasets: [{
+                label: 'Songs Played',
+                data: [25, 18, 12, 8, 15, 11],
+                backgroundColor: [
+                    '#ff6384', '#36a2eb', '#cc65fe', '#ffce56',
+                    '#4bc0c0', '#9966ff'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

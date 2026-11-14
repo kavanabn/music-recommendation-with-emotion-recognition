@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EmotionTune{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Camera and Emotion Detection -->
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-camera text-primary me-2"></i>Face Emotion Detection
+                </h3>
+                <div class="text-center">
+                    <img class="img-fluid rounded" id="bg" src="{{ url_for('video_feed') }}" style="max-height: 400px;" />
+                </div>
+                <div id="emotionResult" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Music Recommendations -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-music text-primary me-2"></i>Music Recommendations
+                </h3>
+                <div id="currentEmotion" class="mb-3"></div>
+                <div id="recommendations"></div>
+            </div>
+        </div>
+
+        <!-- YouTube Video Embed -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <i class="fas fa-play-circle text-primary me-2"></i>YouTube Music Video
+                </h3>
+                <div class="ratio ratio-16x9">
+                    <iframe id="youtubePlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Current Mood -->
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-heart text-danger me-2"></i>Current Mood
+                </h5>
+                <div id="currentMood" class="py-3">
+                    <div class="display-4 mb-2">🎭</div>
+                    <div class="text-muted">No emotion detected yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Emotion Selection -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-hand-pointer text-warning me-2"></i>Manual Selection
+                </h5>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-danger emotion-btn" data-emotion="angry">😠 Angry</button>
+                    <button class="btn btn-outline-success emotion-btn" data-emotion="happy">😊 Happy</button>
+                    <button class="btn btn-outline-primary emotion-btn" data-emotion="sad">😢 Sad</button>
+                    <button class="btn btn-outline-warning emotion-btn" data-emotion="fear">😨 Fear</button>
+                    <button class="btn btn-outline-info emotion-btn" data-emotion="surprise">😮 Surprise</button>
+                    <button class="btn btn-outline-secondary emotion-btn" data-emotion="disgust">🤢 Disgust</button>
+                    <button class="btn btn-outline-dark emotion-btn" data-emotion="neutral">😐 Neutral</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-bar text-info me-2"></i>Quick Stats
+                </h5>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <div class="h4 mb-0" id="songsPlayed">0</div>
+                            <small class="text-muted">Songs Played</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="h4 mb-0" id="emotionsDetected">0</div>
+                        <small class="text-muted">Emotions Detected</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-history text-success me-2"></i>Recent Activity
+                </h5>
+                <div id="recentActivity" class="small">
+                    <p class="text-muted">No recent activity</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+let lastEmotion = null;
+let songsPlayed = 0;
+let emotionsDetected = 0;
+
+function updateDashboard() {
+    $.getJSON('/get_recommendations', function(data) {
+        if (data.emotion !== lastEmotion) {
+            lastEmotion = data.emotion;
+            updateMusicTable(data.music);
+            updateEmotionDisplay(data.emotion);
+            updateVideoPlayer(data.video_url);
+            emotionsDetected++;
+            updateStats();
+            addActivity(`Detected emotion: ${data.emotion}`);
+        }
+    });
+}
+
+// Manual emotion selection
+$(document).on('click', '.emotion-btn', function() {
+    const emotion = $(this).data('emotion');
+    // Capitalize first letter to match backend
+    const emotionName = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+    $.ajax({
+        url: '/set_emotion',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ emotion: emotionName }),
+        success: function(response) {
+            updateDashboard();
+        },
+        error: function() {
+            alert('Failed to set emotion.');
+        }
+    });
+});
+
+function updateMusicTable(musicList) {
+    $("#recommendations").html("");
+    var table = $("<table class='table table-hover' id=DynamicTable></table>").appendTo("#recommendations");
+    var rowHeader = $("<tr class='table-primary'></tr>").appendTo(table);
+    $("<th></th>").text("Song").appendTo(rowHeader);
+    $("<th></th>").text("Artist").appendTo(rowHeader);
+    $("<th></th>").text("Action").appendTo(rowHeader);
+
+    $.each(musicList, function (i, value) {
+        var row = $("<tr></tr>").appendTo(table);
+        $("<td></td>").html(`<strong>${value.Name}</strong><br><small class='text-muted'>${value.Album}</small>`).appendTo(row);
+        $("<td></td>").text(value.Artist).appendTo(row);
+        var playBtn = `<button class='btn btn-sm btn-primary' onclick="playVideo('${value.Name}', '${value.Artist}')">
+            <i class='fas fa-play me-1'></i>Play
+        </button>`;
+        $("<td></td>").html(playBtn).appendTo(row);
+    });
+}
+
+function updateEmotionDisplay(emotion) {
+    document.getElementById('currentEmotion').innerHTML = 
+        `<div class="alert alert-primary">
+            <i class="fas fa-music me-2"></i>Music for: <strong>${emotion}</strong>
+        </div>`;
+
+    const emotionEmojis = {
+        'Angry': '😠', 'Happy': '😊', 'Sad': '😢',
+        'Fearful': '😨', 'Surprised': '😮', 'Disgusted': '🤢', 'Neutral': '😐'
+    };
+
+    const currentMoodDiv = document.getElementById('currentMood');
+    currentMoodDiv.innerHTML = `
+        <div class="display-4 mb-2">${emotionEmojis[emotion] || '🎭'}</div>
+        <div class="fw-bold">${emotion}</div>
+        <small class="text-muted">Detected just now</small>
+    `;
+}
+
+function updateVideoPlayer(url) {
+    document.getElementById('youtubePlayer').src = url;
+}
+
+function playVideo(songName, artist) {
+    const searchQuery = encodeURIComponent(`${songName} ${artist}`);
+    const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${searchQuery}`;
+    window.open(youtubeSearchUrl, '_blank');
+    songsPlayed++;
+    updateStats();
+    addActivity(`Played: ${songName} by ${artist}`);
+}
+
+function updateStats() {
+    document.getElementById('songsPlayed').textContent = songsPlayed;
+    document.getElementById('emotionsDetected').textContent = emotionsDetected;
+}
+
+function addActivity(activity) {
+    const activityDiv = document.getElementById('recentActivity');
+    const time = new Date().toLocaleTimeString();
+    const activityItem = `<div class="mb-2">
+        <small class="text-muted">${time}</small><br>
+        ${activity}
+    </div>`;
+
+    if (activityDiv.innerHTML.includes('No recent activity')) {
+        activityDiv.innerHTML = activityItem;
+    } else {
+        activityDiv.innerHTML = activityItem + activityDiv.innerHTML;
+    }
+
+    const activities = activityDiv.children;
+    if (activities.length > 5) {
+        activityDiv.removeChild(activities[activities.length - 1]);
+    }
+}
+
+$(document).ready(function() {
+    setInterval(updateDashboard, 1000);
+});
+
+// Camera error handling
+$(function() {
+    $('#bg').on('error', function() {
+        $(this).replaceWith('<div class="alert alert-danger">Camera feed not available. Please check your webcam and permissions.</div>');
+    });
+});
+</script>
+{% endblock %}

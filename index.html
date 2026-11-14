@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}EmotionTune - AI-Powered Music Recommendations{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-4">
+            <i class="fas fa-brain me-3"></i>EmotionTune
+        </h1>
+        <p class="lead mb-5">AI-powered music recommendations that understand your emotions through facial expressions</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 py-3 fw-bold">
+                <i class="fas fa-rocket me-2"></i>Get Started
+            </a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="display-4 mb-3">🎭</div>
+                    <h4 class="card-title">Face Emotion Detection</h4>
+                    <p class="card-text">Advanced AI analyzes your facial expressions in real-time to detect emotions with high accuracy.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="display-4 mb-3">🎵</div>
+                    <h4 class="card-title">Smart Music Matching</h4>
+                    <p class="card-text">Get personalized music recommendations based on your emotional state and mood patterns.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="display-4 mb-3">📊</div>
+                    <h4 class="card-title">Mood Analytics</h4>
+                    <p class="card-text">Track your emotional patterns over time and discover insights about your mood trends.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-5 text-white">How It Works</h2>
+    <div class="row g-4">
+        <div class="col-md-3 text-center">
+            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <i class="fas fa-camera fa-2x text-primary"></i>
+            </div>
+            <h5 class="text-white">1. Capture Emotion</h5>
+            <p class="text-white-50">Use your camera to capture your facial expression</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <i class="fas fa-brain fa-2x text-primary"></i>
+            </div>
+            <h5 class="text-white">2. AI Analysis</h5>
+            <p class="text-white-50">Our AI analyzes your emotional state</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <i class="fas fa-search fa-2x text-primary"></i>
+            </div>
+            <h5 class="text-white">3. Music Matching</h5>
+            <p class="text-white-50">Find songs that match your emotional wavelength</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <i class="fas fa-headphones fa-2x text-primary"></i>
+            </div>
+            <h5 class="text-white">4. Enjoy & Learn</h5>
+            <p class="text-white-50">Listen and rate to improve future recommendations</p>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="container my-5">
+    <div class="card text-center p-5">
+        <h3 class="mb-4">Ready to Discover Your Perfect Music?</h3>
+        <p class="lead mb-4">Join thousands of users who are already experiencing personalized music recommendations based on their emotions.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-5 py-3 fw-bold">
+            <i class="fas fa-user-plus me-2"></i>Create Free Account
+        </a>
+    </div>
+</div>
+{% endblock %}
